@@ -19,6 +19,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _connectionStatus = 'Checking...';
+  bool _isModalShown = false;
 
   @override
   void initState() {
@@ -34,7 +35,10 @@ class _MyAppState extends State<MyApp> {
       if (response.statusCode == 200) {
         setState(() {
           _connectionStatus = 'Connected';
-          _showModal();
+          if (!_isModalShown) {
+            _showModal();
+            _isModalShown = true;
+          }
         });
       } else {
         setState(() {
@@ -59,7 +63,11 @@ class _MyAppState extends State<MyApp> {
           child: Text('Connected', style: TextStyle(color: Colors.white)),
         ),
       ),
-    );
+    ).then((_) {
+      setState(() {
+        _isModalShown = false;
+      });
+    });
   }
 
   @override
